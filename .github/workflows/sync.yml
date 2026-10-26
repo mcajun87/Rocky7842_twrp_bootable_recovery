@@ -1,0 +1,27 @@
+name: Auto Sync Upstream
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天北京时间早上 8:00 自动同步一次
+  workflow_dispatch: # 支持你在 Actions 页面手动点击按钮随时触发同步
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == github.actor }}
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          ref: android-12.1 # 锁定你的目标分支
+
+      - name: Sync upstream changes
+        uses: aitemr/upstream-sync-action@v1.1.0
+        with:
+          upstream_sync_repo: "Rocky7842/twrp_bootable_recovery" # 原作者的仓库
+          upstream_sync_branch: "android-12.1"                    # 原作者的分支
+          target_sync_branch: "android-12.1"                      # 你仓库的分支
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
