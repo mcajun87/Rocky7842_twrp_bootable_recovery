@@ -1,4 +1,4 @@
-name: Auto Sync Upstream
+name: Rocky7842_twrp_bootable_recovery
 
 permissions:
   contents: write
